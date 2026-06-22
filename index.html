@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inbet - New starter onboarding</title>
+  <meta name="description" content="Inbet new-starter onboarding - teams, leadership, ways of working, access and first steps. Built live from the welcome deck.">
+  <meta name="color-scheme" content="light">
+
+  <!-- Public web fonts (Google Fonts). Falls back to system fonts offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Public library: JSZip (unzips the .pptx in the browser) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+/* ============================================================================
+   Inbet onboarding - styles
+   Palette sampled directly from the source deck:
+     yellow  #FCE34C (the inbet wordmark)   blues #0F5ABE / #324DD2 / #7FC9F7
+   Dominance: deep blue carries the page; yellow is the single sharp accent.
+   Signature motif: the yellow "chip" - a soft radial token reused for team
+   monograms, step numbers, list markers and eyebrow dots (echoes the deck's
+   circular team wheel without resorting to bars or stripes).
+   ========================================================================== */
+
+:root {
+  --navy:      #081d38;
+  --navy-2:    #0b2c54;
+  --blue:      #0f5abe;
+  --blue-2:    #324dd2;
+  --sky:       #7fc9f7;
+  --ice:       #eaf2fc;
+  --paper:     #f4f8fd;
+  --white:     #ffffff;
+  --yellow:    #fce34c;
+  --yellow-2:  #ffd60a;
+  --ink:       #0b1b33;
+  --muted:     #586a86;
+  --line:      #d8e4f3;
+  --line-soft: #e7eefa;
+
+  --shadow-sm: 0 1px 2px rgba(8,29,56,.06), 0 2px 6px rgba(8,29,56,.05);
+  --shadow-md: 0 8px 24px rgba(8,29,56,.10);
+  --shadow-lg: 0 24px 60px rgba(8,29,56,.20);
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 26px;
+
+  --nav-h: 68px;
+  --ff-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --ff-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ff-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --maxw: 1180px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--blue); text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 3px solid var(--blue-2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+
+/* ---- eyebrow + chip motif --------------------------------------------- */
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--ff-mono);
+  font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--blue); font-weight: 500;
+  margin: 0 0 16px;
+}
+.eyebrow::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 1px, var(--yellow) 2px 100%);
+  box-shadow: 0 0 0 3px rgba(252,227,76,.25);
+}
+.on-dark .eyebrow { color: var(--sky); }
+
+.chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 34% 28%, #fffbe0 0 6%, var(--yellow) 38%, var(--yellow-2) 100%);
+  color: #3a2f00; font-family: var(--ff-display); font-weight: 700;
+  box-shadow: inset 0 -3px 8px rgba(160,120,0,.22), 0 4px 10px rgba(180,140,0,.28);
+}
+
+/* ---- top nav ----------------------------------------------------------- */
+
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  height: var(--nav-h);
+  background: rgba(8,29,56,.82);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(127,201,247,.16);
+}
+.nav .wrap { height: 100%; display: flex; align-items: center; gap: 22px; }
+.nav__brand { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+.nav__brand img { height: 26px; width: auto; }
+.nav__brand .badge {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--navy); background: var(--yellow);
+  padding: 3px 7px; border-radius: 999px; font-weight: 600;
+}
+.nav__links { display: flex; gap: 4px; align-items: center; }
+.nav__links a {
+  color: #cfe2f7; font-size: 14.5px; font-weight: 500;
+  padding: 8px 13px; border-radius: 999px; transition: background .18s, color .18s;
+}
+.nav__links a:hover { color: #fff; background: rgba(127,201,247,.14); }
+.nav__links a.is-active { color: var(--navy); background: var(--yellow); }
+
+.sync {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ff-mono); font-size: 11.5px; color: var(--sky);
+  border: 1px solid rgba(127,201,247,.3); border-radius: 999px;
+  padding: 6px 12px; white-space: nowrap;
+}
+.sync .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 4px rgba(252,227,76,.22); }
+
+.nav__toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+.nav__toggle span { display: block; width: 22px; height: 2px; background: #cfe2f7; margin: 4px 0; border-radius: 2px; }
+
+/* ---- hero -------------------------------------------------------------- */
+
+.hero { position: relative; color: #fff; overflow: hidden; isolation: isolate; }
+.hero__bg { position: absolute; inset: 0; z-index: -2; background: var(--navy); }
+.hero__bg img { width: 100%; height: 100%; object-fit: cover; opacity: .42; }
+.hero__bg::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 90% at 80% -10%, rgba(50,77,210,.55), transparent 60%),
+    linear-gradient(180deg, rgba(8,29,56,.62) 0%, rgba(8,29,56,.86) 55%, var(--paper) 100%);
+}
+.hero__inner { padding: clamp(64px, 12vw, 132px) 0 clamp(80px, 13vw, 150px); position: relative; }
+.hero__logo { width: clamp(180px, 34vw, 300px); margin: 6px 0 26px; filter: drop-shadow(0 8px 24px rgba(0,0,0,.35)); }
+.hero h1 {
+  font-family: var(--ff-display); font-weight: 700;
+  font-size: clamp(2.4rem, 6.2vw, 4.4rem); line-height: 1.02;
+  letter-spacing: -.02em; margin: 0 0 18px; max-width: 16ch;
+}
+.hero h1 em { font-style: normal; color: var(--yellow); }
+.hero__sub { font-size: clamp(1.05rem, 2.1vw, 1.3rem); color: #d7e6f8; max-width: 56ch; margin: 0 0 34px; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 14px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-weight: 600; font-size: 15px; padding: 13px 22px; border-radius: 999px;
+  border: 1px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s;
+  font-family: var(--ff-body);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn--primary { background: var(--yellow); color: var(--navy); box-shadow: 0 10px 26px rgba(252,227,76,.34); }
+.btn--primary:hover { background: #fff0a3; }
+.btn--ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(207,226,247,.4); }
+.btn--ghost:hover { background: rgba(255,255,255,.16); }
+
+/* ---- generic section --------------------------------------------------- */
+
+.section { padding: clamp(64px, 9vw, 110px) 0; }
+.section--alt { background: var(--white); }
+.section--dark { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%); color: #eaf3ff; }
+.section__head { max-width: 62ch; margin-bottom: 46px; }
+.section__head h2 {
+  font-family: var(--ff-display); font-weight: 700;
+  font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 14px;
+}
+.section__head p { font-size: 1.08rem; color: var(--muted); margin: 0; }
+.section--dark .section__head p { color: #aac6e6; }
+
+/* reveal on scroll */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ---- introduction (online / offline) ---------------------------------- */
+
+.intro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.intro-card {
+  background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--r-lg);
+  padding: 32px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+}
+.intro-card h3 { font-family: var(--ff-display); font-size: 1.5rem; margin: 0 0 6px; letter-spacing: -.01em; }
+.intro-card .kind { font-family: var(--ff-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); }
+.intro-card .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ice); color: var(--navy-2); border: 1px solid var(--line-soft);
+  padding: 9px 15px; border-radius: 999px; font-weight: 600; font-size: 14.5px;
+}
+.tag .chip { width: 18px; height: 18px; font-size: 0; }
+
+/* ---- teams ------------------------------------------------------------- */
+
+.glance { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 40px; }
+.glance span {
+  font-family: var(--ff-mono); font-size: 12.5px; color: var(--navy-2);
+  background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px;
+}
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
+.card {
+  background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--r-md);
+  padding: 26px 26px 28px; box-shadow: var(--shadow-sm);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+  display: flex; flex-direction: column;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--sky); }
+.card__top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.card__token { width: 52px; height: 52px; font-size: 17px; letter-spacing: .02em; }
+.card__name { font-family: var(--ff-display); font-weight: 600; font-size: 1.16rem; line-height: 1.2; margin: 0; }
+.card__body { color: #46566f; font-size: 15px; margin: 0; }
+
+/* ---- leadership (dark) ------------------------------------------------- */
+
+.execs { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 22px; }
+.exec {
+  background: rgba(255,255,255,.045); border: 1px solid rgba(127,201,247,.18);
+  border-radius: var(--r-lg); padding: 30px; display: flex; gap: 20px; align-items: flex-start;
+  transition: border-color .2s, background .2s;
+}
+.exec:hover { border-color: var(--yellow); background: rgba(255,255,255,.07); }
+.exec__mono {
+  width: 66px; height: 66px; font-size: 18px; flex: none;
+  font-family: var(--ff-display); letter-spacing: .03em;
+}
+.exec__role { font-family: var(--ff-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--sky); margin: 2px 0 4px; }
+.exec__title { font-family: var(--ff-display); font-size: 1.32rem; font-weight: 600; margin: 0 0 10px; color: #fff; }
+.exec__body { color: #b9d2ee; font-size: 14.5px; margin: 0; }
+
+/* ---- best practices ---------------------------------------------------- */
+
+.tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; }
+.tool { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
+.tool__head {
+  display: flex; align-items: center; gap: 13px;
+  padding: 22px 26px; background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 130%); color: #fff;
+}
+.tool__head .chip { width: 36px; height: 36px; font-size: 14px; }
+.tool__head h3 { font-family: var(--ff-display); font-size: 1.3rem; margin: 0; font-weight: 600; }
+.tool__body { padding: 10px 26px 26px; }
+.shift { padding: 20px 0; border-bottom: 1px solid var(--line-soft); }
+.shift:last-child { border-bottom: 0; padding-bottom: 4px; }
+.shift__label { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+.shift__num { width: 26px; height: 26px; font-size: 13px; }
+.shift__label h4 { font-family: var(--ff-display); font-size: 1.02rem; margin: 0; font-weight: 600; letter-spacing: -.01em; }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ticks li { position: relative; padding-left: 26px; font-size: 14.5px; color: #46566f; }
+.ticks li::before {
+  content: ""; position: absolute; left: 6px; top: 9px; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--yellow-2);
+}
+
+/* ---- access ------------------------------------------------------------ */
+
+.access-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 24px; align-items: start; }
+.panel { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 28px; }
+.panel > h3 {
+  font-family: var(--ff-display); font-size: 1.12rem; margin: 0 0 4px; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel > h3 .chip { width: 22px; height: 22px; font-size: 0; }
+.panel__hint { font-size: 13px; color: var(--muted); margin: 0 0 18px; }
+.rows { display: flex; flex-direction: column; }
+.row {
+  display: flex; gap: 14px; align-items: baseline; justify-content: space-between;
+  padding: 15px 0; border-top: 1px solid var(--line-soft);
+}
+.row:first-child { border-top: 0; }
+.row__name { font-weight: 600; color: var(--ink); font-size: 15px; flex: none; max-width: 48%; }
+.row a.row__name { color: var(--blue); display: inline-flex; align-items: center; gap: 6px; }
+.row a.row__name:hover { text-decoration: underline; }
+.row a.row__name svg { width: 13px; height: 13px; opacity: .7; flex: none; }
+.row__use { color: var(--muted); font-size: 13.5px; text-align: right; }
+
+/* ---- first steps ------------------------------------------------------- */
+
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; counter-reset: step; }
+.step {
+  position: relative; background: var(--white); border: 1px solid var(--line-soft);
+  border-radius: var(--r-md); padding: 24px 24px 24px 76px; box-shadow: var(--shadow-sm);
+  transition: transform .2s, box-shadow .2s, border-color .2s; color: inherit;
+}
+.step:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--sky); }
+.step__num { position: absolute; left: 22px; top: 24px; width: 38px; height: 38px; font-size: 15px; }
+.step h4 {
+  font-family: var(--ff-display); font-size: 1.08rem; margin: 0 0 7px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 7px; color: var(--blue);
+}
+.step h4 svg { width: 14px; height: 14px; opacity: .75; }
+.step.is-static h4 { color: var(--ink); }
+.step p { margin: 0; color: #46566f; font-size: 14.5px; }
+
+/* ---- closing ----------------------------------------------------------- */
+
+.closing { position: relative; color: #fff; text-align: center; overflow: hidden; isolation: isolate; }
+.closing__bg { position: absolute; inset: 0; z-index: -1; background: linear-gradient(160deg, var(--blue) 0%, var(--navy) 70%); }
+.closing__bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 80% at 50% -10%, rgba(252,227,76,.18), transparent 60%);
+}
+.closing__inner { padding: clamp(72px, 12vw, 130px) 0; }
+.closing h2 { font-family: var(--ff-display); font-weight: 700; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.02em; margin: 0 auto 22px; max-width: 18ch; }
+.closing__logo { width: clamp(160px, 30vw, 260px); margin: 0 auto 30px; }
+.closing .btn { margin-top: 6px; }
+
+/* ---- footer ------------------------------------------------------------ */
+
+.foot { background: var(--navy); color: #9fbbe0; padding: 34px 0; font-size: 13.5px; }
+.foot .wrap { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.foot img { height: 20px; opacity: .9; }
+.foot code { font-family: var(--ff-mono); color: var(--sky); background: rgba(127,201,247,.1); padding: 2px 7px; border-radius: 6px; font-size: 12px; }
+
+/* ---- loading / error --------------------------------------------------- */
+
+.state { min-height: 70vh; display: grid; place-items: center; text-align: center; padding: 40px 24px; }
+.state__inner { max-width: 560px; }
+.spinner { width: 46px; height: 46px; margin: 0 auto 22px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--blue); animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+.state h2 { font-family: var(--ff-display); margin: 0 0 10px; }
+.state p { color: var(--muted); margin: 6px 0; }
+.state pre {
+  text-align: left; background: var(--navy); color: #cfe6ff; font-family: var(--ff-mono); font-size: 12.5px;
+  padding: 14px 16px; border-radius: var(--r-sm); overflow-x: auto; margin-top: 18px;
+}
+.state .err-icon { width: 54px; height: 54px; border-radius: 50%; background: #fff4f4; color: #d6453b; display: grid; place-items: center; margin: 0 auto 18px; font-size: 26px; }
+
+/* ---- responsive -------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .nav__links, .sync { display: none; }
+  .nav__toggle { display: block; }
+  .nav.open .nav__links {
+    display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+    position: absolute; top: var(--nav-h); left: 0; right: 0;
+    background: var(--navy); padding: 14px 24px 22px; border-bottom: 1px solid rgba(127,201,247,.18);
+  }
+  .nav.open .nav__links a { padding: 12px 14px; }
+  .exec, .intro-card { padding: 24px; }
+  .row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .row__name, .row__use { max-width: 100%; text-align: left; }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Everything below is rendered at runtime from Welcome_Inbet_Online.pptx -->
+  <main id="app"></main>
+
+  <script>
+/* === parser.js ============================================================ */
+/* ============================================================================
+   Inbet Onboarding - PPTX parser
+   Reads an Office Open XML (.pptx) package (already loaded as a JSZip instance)
+   and returns a structured content model. No content is hard-coded here: every
+   title, paragraph, link, table and SmartArt node is read live from the deck,
+   so editing the .pptx in the repo updates the rendered site automatically.
+
+   Pure parsing only - uses the global DOMParser (built into every browser, and
+   polyfilled in the Node test harness). Exposes window.InbetDeck.parseDeck(zip).
+   ========================================================================== */
+(function (global) {
+  "use strict";
+
+  var R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+
+  /* ---- small XML helpers ------------------------------------------------ */
+
+  function parseXml(text) {
+    return new global.DOMParser().parseFromString(text, "application/xml");
+  }
+
+  // Collect descendants matching a qualified name (e.g. "a:t") OR local name.
+  function tags(node, name) {
+    if (!node) return [];
+    var local = name.indexOf(":") >= 0 ? name.split(":")[1] : name;
+    var out = [];
+    var byQ = node.getElementsByTagName(name);
+    for (var i = 0; i < byQ.length; i++) out.push(byQ[i]);
+    if (out.length) return out;
+    // Fallback: match by localName (namespace-agnostic)
+    var all = node.getElementsByTagName("*");
+    for (var j = 0; j < all.length; j++) {
+      if (all[j].localName === local) out.push(all[j]);
+    }
+    return out;
+  }
+
+  function firstTag(node, name) {
+    var t = tags(node, name);
+    return t.length ? t[0] : null;
+  }
+
+  // direct element children only
+  function childEls(node) {
+    var out = [];
+    if (!node) return out;
+    for (var i = 0; i < node.childNodes.length; i++) {
+      if (node.childNodes[i].nodeType === 1) out.push(node.childNodes[i]);
+    }
+    return out;
+  }
+
+  // read an r:* attribute robustly (namespace-aware with prefix fallback)
+  function relAttr(el, local) {
+    if (!el) return null;
+    var v = el.getAttributeNS ? el.getAttributeNS(R_NS, local) : null;
+    if (v) return v;
+    return el.getAttribute("r:" + local) || el.getAttribute(local);
+  }
+
+  /* ---- text normalisation ----------------------------------------------- */
+
+  // Light per-run normalisation: swap every long dash variant for a plain
+  // hyphen and tidy non-breaking spaces / curly quotes, but DO NOT trim or
+  // collapse spaces (that would merge adjacent runs, e.g. "The " + "CRM").
+  function normChars(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-")
+      .replace(/\u00a0/g, " ")
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201c\u201d]/g, '"');
+  }
+
+  // Full clean for assembled lines/titles: normalise chars, collapse runs of
+  // whitespace, drop stray spaces before punctuation, and trim.
+  function clean(s) {
+    return normChars(s)
+      .replace(/\s+/g, " ")
+      .replace(/\s+([.,;:!?])/g, "$1")
+      .trim();
+  }
+
+  /* ---- path helpers ----------------------------------------------------- */
+
+  function dirname(path) {
+    var i = path.lastIndexOf("/");
+    return i < 0 ? "" : path.slice(0, i);
+  }
+
+  // resolve "../media/x.png" against a base directory like "ppt/slides"
+  function resolvePath(baseDir, rel) {
+    if (/^\//.test(rel)) return rel.replace(/^\//, "");
+    var parts = (baseDir ? baseDir.split("/") : []).concat(rel.split("/"));
+    var stack = [];
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p === "" || p === ".") continue;
+      if (p === "..") stack.pop();
+      else stack.push(p);
+    }
+    return stack.join("/");
+  }
+
+  /* ---- relationships ---------------------------------------------------- */
+
+  // Parse a *.rels file into { rId: { target, type, mode } } with targets
+  // resolved to absolute package paths relative to the part's directory.
+  function parseRels(zip, partPath) {
+    var dir = dirname(partPath);
+    var relsPath = dir + (dir ? "/" : "") + "_rels/" + partPath.split("/").pop() + ".rels";
+    var file = zip.file(relsPath);
+    var map = {};
+    if (!file) return Promise.resolve(map);
+    return file.async("string").then(function (xmlText) {
+      var doc = parseXml(xmlText);
+      var rels = tags(doc, "Relationship");
+      for (var i = 0; i < rels.length; i++) {
+        var r = rels[i];
+        var id = r.getAttribute("Id");
+        var target = r.getAttribute("Target") || "";
+        var mode = r.getAttribute("TargetMode") || "Internal";
+        var type = r.getAttribute("Type") || "";
+        var resolved = mode === "External" ? target : resolvePath(dir, target);
+        map[id] = { target: resolved, type: type, mode: mode };
+      }
+      return map;
+    });
+  }
+
+  /* ---- run / paragraph extraction --------------------------------------- */
+
+  // One text run -> { text, bold, href }
+  function readRun(r, rels) {
+    var t = firstTag(r, "a:t");
+    var text = t ? normChars(t.textContent || "") : "";
+    var rPr = firstTag(r, "a:rPr");
+    var bold = false;
+    var href = null;
+    if (rPr) {
+      bold = rPr.getAttribute("b") === "1";
+      var link = firstTag(rPr, "a:hlinkClick");
+      if (link) {
+        var rid = relAttr(link, "id");
+        if (rid && rels[rid] && rels[rid].mode === "External") href = rels[rid].target;
+      }
+    }
+    return { text: text, bold: bold, href: href };
+  }
+
+  // A paragraph element -> { runs:[...] }
+  function readParagraph(p, rels) {
+    var runs = [];
+    var rNodes = tags(p, "a:r");
+    for (var i = 0; i < rNodes.length; i++) runs.push(readRun(rNodes[i], rels));
+    return { runs: runs };
+  }
+
+  function paragraphText(par) {
+    return clean(par.runs.map(function (r) { return r.text; }).join(""));
+  }
+
+  /* ---- SmartArt (diagram) tree ------------------------------------------ */
+
+  // Reconstruct a SmartArt outline from a diagrams/dataN.xml document using the
+  // connection list (structural "parOf" connections, ordered by srcOrd).
+  // Returns an array of top-level nodes: { text, children:[...] }.
+  function buildSmartArt(dataXml) {
+    var doc = parseXml(dataXml);
+    var pts = {};
+    var rootId = null;
+    var ptNodes = tags(doc, "dgm:pt");
+    for (var i = 0; i < ptNodes.length; i++) {
+      var pt = ptNodes[i];
+      var id = pt.getAttribute("modelId");
+      var type = pt.getAttribute("type") || "node";
+      if (type === "parTrans" || type === "sibTrans" || type === "pres") continue;
+      var txt = clean(tags(pt, "a:t").map(function (t) { return t.textContent || ""; }).join(" "));
+      pts[id] = { text: txt, children: [] };
+      if (type === "doc") rootId = id;
+    }
+    var kids = {}; // srcId -> [{ord, dst}]
+    var cxnNodes = tags(doc, "dgm:cxn");
+    for (var j = 0; j < cxnNodes.length; j++) {
+      var cx = cxnNodes[j];
+      var ctype = cx.getAttribute("type") || "parOf";
+      if (ctype !== "parOf") continue; // skip presOf / presParOf
+      var src = cx.getAttribute("srcId");
+      var dst = cx.getAttribute("destId");
+      var ord = parseInt(cx.getAttribute("srcOrd") || "0", 10);
+      if (pts[src] && pts[dst]) {
+        (kids[src] = kids[src] || []).push({ ord: ord, dst: dst });
+      }
+    }
+    function attach(id) {
+      var list = (kids[id] || []).slice().sort(function (a, b) { return a.ord - b.ord; });
+      var node = pts[id];
+      for (var k = 0; k < list.length; k++) {
+        var child = pts[list[k].dst];
+        node.children.push(child);
+        attach(list[k].dst);
+      }
+    }
+    if (rootId == null) return [];
+    attach(rootId);
+    return pts[rootId].children;
+  }
+
+  /* ---- tables ----------------------------------------------------------- */
+
+  // a:tbl -> { rows: [ [ {text, href}, ... ], ... ] }
+  function readTable(tbl, rels) {
+    var rows = [];
+    var trs = tags(tbl, "a:tr");
+    for (var i = 0; i < trs.length; i++) {
+      var cells = [];
+      var tcs = tags(trs[i], "a:tc");
+      for (var c = 0; c < tcs.length; c++) {
+        var txBody = firstTag(tcs[c], "a:txBody");
+        var text = "", href = null;
+        if (txBody) {
+          var ps = tags(txBody, "a:p");
+          var lines = [];
+          for (var p = 0; p < ps.length; p++) {
+            var par = readParagraph(ps[p], rels);
+            lines.push(paragraphText(par));
+            for (var rn = 0; rn < par.runs.length; rn++) {
+              if (!href && par.runs[rn].href) href = par.runs[rn].href;
+            }
+          }
+          text = clean(lines.join(" "));
+        }
+        cells.push({ text: text, href: href });
+      }
+      rows.push(cells);
+    }
+    return { rows: rows };
+  }
+
+  /* ---- one slide -------------------------------------------------------- */
+
+  function parseSlide(zip, slidePath, index) {
+    return parseRels(zip, slidePath).then(function (rels) {
+      return zip.file(slidePath).async("string").then(function (xmlText) {
+        var doc = parseXml(xmlText);
+        var slide = {
+          index: index,
+          title: "",
+          titleNorm: "",
+          paragraphs: [],
+          bodyText: "",
+          boldRuns: [],
+          tables: [],
+          smartart: []
+        };
+
+        var spTree = firstTag(doc, "p:spTree");
+        var nodes = childEls(spTree);
+        var titleText = "";
+        var shapeTexts = []; // text of each non-title body shape, in order
+
+        // diagram-data relationship ids to load after the synchronous pass
+        var smartArtRelIds = [];
+
+        for (var i = 0; i < nodes.length; i++) {
+          var node = nodes[i];
+          var ln = node.localName;
+
+          if (ln === "sp") {
+            // placeholder type (title / ctrTitle / body ...)
+            var ph = firstTag(node, "p:ph");
+            var phType = ph ? (ph.getAttribute("type") || "body") : "";
+            var txBody = firstTag(node, "p:txBody");
+            if (!txBody) continue;
+            var ps = tags(txBody, "a:p");
+            var isTitle = phType === "title" || phType === "ctrTitle";
+            var shapeLines = [];
+            for (var p = 0; p < ps.length; p++) {
+              var par = readParagraph(ps[p], rels);
+              if (isTitle) {
+                // join title runs with spaces so line-break runs don't fuse
+                // (e.g. "...role" + "at" -> "...role at")
+                var ttext = clean(par.runs.map(function (r) { return r.text; }).join(" "));
+                if (ttext) titleText = titleText ? titleText + " " + ttext : ttext;
+                continue;
+              }
+              var ptext = paragraphText(par);
+              slide.paragraphs.push(par);
+              if (ptext) shapeLines.push(ptext);
+              for (var b = 0; b < par.runs.length; b++) {
+                if (par.runs[b].bold) {
+                  var bt = clean(par.runs[b].text);
+                  if (bt) slide.boldRuns.push(bt);
+                }
+              }
+            }
+            var shapeText = clean(shapeLines.join(" "));
+            if (!isTitle && shapeText) shapeTexts.push(shapeText);
+          } else if (ln === "graphicFrame") {
+            // could be a table or a SmartArt diagram
+            var tbl = firstTag(node, "a:tbl");
+            if (tbl) {
+              slide.tables.push(readTable(tbl, rels));
+            } else {
+              var relIds = firstTag(node, "dgm:relIds");
+              if (relIds) {
+                var dm = relAttr(relIds, "dm");
+                if (dm && rels[dm]) smartArtRelIds.push(rels[dm].target);
+              }
+            }
+          }
+        }
+
+        // Resolve the title. Prefer a real title placeholder. Otherwise the
+        // section label is the shortest standalone text box (headings are
+        // short; descriptions are long), and the rest becomes the body.
+        if (titleText) {
+          slide.title = titleText;
+          slide.bodyText = clean(shapeTexts.join(" "));
+        } else if (shapeTexts.length) {
+          var headingIdx = 0;
+          for (var s2 = 1; s2 < shapeTexts.length; s2++) {
+            if (shapeTexts[s2].length < shapeTexts[headingIdx].length) headingIdx = s2;
+          }
+          slide.title = shapeTexts[headingIdx];
+          slide.bodyText = clean(shapeTexts.filter(function (_, k) { return k !== headingIdx; }).join(" "));
+        }
+        if (!slide.title && slide.bodyText) slide.title = slide.bodyText;
+        slide.titleNorm = clean(slide.title).toLowerCase();
+
+        // load SmartArt data parts (async)
+        var saPromises = smartArtRelIds.map(function (path) {
+          var f = zip.file(path);
+          if (!f) return Promise.resolve(null);
+          return f.async("string").then(function (xml) {
+            try { return buildSmartArt(xml); } catch (e) { return null; }
+          });
+        });
+        return Promise.all(saPromises).then(function (trees) {
+          trees.forEach(function (tr) { if (tr && tr.length) slide.smartart.push(tr); });
+          return slide;
+        });
+      });
+    });
+  }
+
+  /* ---- branding assets (logo + hero) ------------------------------------ */
+
+  var MIME = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", svg: "image/svg+xml", webp: "image/webp" };
+
+  function toDataUrl(zip, path) {
+    var file = zip.file(path);
+    if (!file) return Promise.resolve(null);
+    var ext = (path.split(".").pop() || "").toLowerCase();
+    var mime = MIME[ext] || "application/octet-stream";
+    return file.async("base64").then(function (b64) {
+      return "data:" + mime + ";base64," + b64;
+    });
+  }
+
+  // The recurring brand mark lives in the slide layouts/masters; the hero
+  // artwork is the largest bitmap in /media. Detect both generically.
+  function findAssets(zip) {
+    var layoutImgs = []; // candidates for logo
+    var relsFiles = [];
+    zip.forEach(function (path) {
+      if (/^ppt\/(slideLayouts|slideMasters)\/_rels\/.+\.rels$/.test(path)) relsFiles.push(path);
+    });
+    var logoPromise = Promise.all(relsFiles.map(function (rp) {
+      return zip.file(rp).async("string").then(function (xml) {
+        var doc = parseXml(xml);
+        var rels = tags(doc, "Relationship");
+        for (var i = 0; i < rels.length; i++) {
+          if (/relationships\/image$/.test(rels[i].getAttribute("Type") || "")) {
+            var dir = dirname(dirname(rp)); // ppt/slideLayouts
+            layoutImgs.push(resolvePath(dir, rels[i].getAttribute("Target")));
+          }
+        }
+      });
+    })).then(function () {
+      // de-dupe, prefer the smallest (logos are light); fall back to first
+      var uniq = layoutImgs.filter(function (v, i) { return layoutImgs.indexOf(v) === i; });
+      if (!uniq.length) return null;
+      // choose by smallest byte size among candidates
+      return Promise.all(uniq.map(function (p) {
+        var f = zip.file(p);
+        return f ? f.async("uint8array").then(function (u) { return { p: p, n: u.length }; }) : Promise.resolve({ p: p, n: 1e12 });
+      })).then(function (arr) {
+        arr.sort(function (a, b) { return a.n - b.n; });
+        return toDataUrl(zip, arr[0].p);
+      });
+    });
+
+    // hero = largest image overall in ppt/media
+    var media = [];
+    zip.forEach(function (path) {
+      if (/^ppt\/media\/.+\.(png|jpe?g|gif|webp)$/i.test(path)) media.push(path);
+    });
+    var heroPromise = Promise.all(media.map(function (p) {
+      var f = zip.file(p);
+      return f.async("uint8array").then(function (u) { return { p: p, n: u.length }; });
+    })).then(function (arr) {
+      if (!arr.length) return null;
+      arr.sort(function (a, b) { return b.n - a.n; });
+      return toDataUrl(zip, arr[0].p);
+    });
+
+    return Promise.all([logoPromise, heroPromise]).then(function (res) {
+      return { logo: res[0], hero: res[1] };
+    });
+  }
+
+  /* ---- ordered slide list ----------------------------------------------- */
+
+  function slideOrder(zip) {
+    return parseRels(zip, "ppt/presentation.xml").then(function (rels) {
+      return zip.file("ppt/presentation.xml").async("string").then(function (xml) {
+        var doc = parseXml(xml);
+        var ids = tags(doc, "p:sldId");
+        var paths = [];
+        for (var i = 0; i < ids.length; i++) {
+          var rid = relAttr(ids[i], "id");
+          if (rid && rels[rid]) paths.push(rels[rid].target);
+        }
+        if (!paths.length) {
+          // fallback: every slideN.xml sorted numerically
+          zip.forEach(function (p) {
+            if (/^ppt\/slides\/slide\d+\.xml$/.test(p)) paths.push(p);
+          });
+          paths.sort(function (a, b) {
+            return parseInt(a.match(/(\d+)/)[1], 10) - parseInt(b.match(/(\d+)/)[1], 10);
+          });
+        }
+        return paths;
+      });
+    });
+  }
+
+  /* ---- public entry ----------------------------------------------------- */
+
+  function parseDeck(zip) {
+    return slideOrder(zip).then(function (paths) {
+      var slides = [];
+      var chain = Promise.resolve();
+      paths.forEach(function (path, i) {
+        chain = chain.then(function () {
+          return parseSlide(zip, path, i).then(function (s) { slides.push(s); });
+        });
+      });
+      return chain
+        .then(function () { return findAssets(zip); })
+        .then(function (assets) {
+          return {
+            meta: { slideCount: slides.length },
+            logo: assets.logo,
+            hero: assets.hero,
+            slides: slides
+          };
+        });
+    });
+  }
+
+  global.InbetDeck = { parseDeck: parseDeck, clean: clean, buildSmartArt: buildSmartArt };
+})(typeof window !== "undefined" ? window : globalThis);
+
+/* === app.js =============================================================== */
+/* ============================================================================
+   Inbet onboarding - renderer & boot
+   Consumes the model produced by parser.js (window.InbetDeck.parseDeck) and
+   builds the page. Nothing about Inbet is hard-coded here: every team, exec,
+   practice, link and label is read live from the .pptx at runtime, so editing
+   the deck and reloading updates the site.
+   ========================================================================== */
+(function () {
+  "use strict";
+
+  var DECK_DEFAULT = "./Welcome_Inbet_Online.pptx";
+
+  /* ---- small helpers ---------------------------------------------------- */
+
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function el(html) {
+    var t = document.createElement("template");
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  function attr(s) { return esc(s); }
+
+  // small external-link glyph (inline so no icon library is needed)
+  var EXT_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<path d="M14 4h6v6"></path><path d="M20 4l-9 9"></path>' +
+    '<path d="M19 14v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"></path></svg>';
+
+  // monogram for a team token
+  function initials(name) {
+    if (!name) return "?";
+    var paren = name.match(/\(([A-Za-z0-9&]{2,6})\)/);
+    if (paren) return paren[1].toUpperCase();
+    var stop = { the: 1, and: 1, "&": 1, team: 1, teams: 1, of: 1, a: 1, for: 1, in: 1, on: 1 };
+    var words = name.replace(/[^\w&\s]/g, " ").split(/\s+/).filter(function (w) {
+      return w && !stop[w.toLowerCase()];
+    });
+    if (!words.length) return name.slice(0, 2).toUpperCase();
+    if (/^[A-Z0-9]{2,4}$/.test(words[0])) return words[0];
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+
+  // clean a captured bold name: drop a trailing stray single lowercase letter
+  // (the deck occasionally bolds the first letter of the following sentence)
+  function tidyName(s) {
+    return String(s || "").replace(/\s+[a-z]$/, "").replace(/[\s,;]+$/, "").trim();
+  }
+
+  function brandFrom(model, intro) {
+    if (intro && intro.smartart[0]) {
+      var top = intro.smartart[0];
+      for (var i = 0; i < top.length; i++) {
+        if (/online/i.test(top[i].text)) return top[i].text;
+      }
+      if (top[0]) return top[0].text;
+    }
+    return "Inbet Online";
+  }
+
+  /* ---- bucket the slides ------------------------------------------------ */
+
+  function bucket(model) {
+    var b = {
+      hero: null, closing: null, intro: null,
+      teams: [], leadership: [], practices: [], access: [], firststeps: null
+    };
+    model.slides.forEach(function (s, i) {
+      var n = s.titleNorm || "";
+      if (i === 0) { b.hero = s; return; }
+      if (/new role/.test(n)) { b.closing = s; return; }
+      if (n.indexOf("introduction") !== -1) { b.intro = s; return; }
+      if (n.indexOf("best practices") !== -1) { b.practices.push(s); return; }
+      if (n.indexOf("first steps") !== -1 || n.indexOf("getting to know") !== -1) { b.firststeps = s; return; }
+      if (n.indexOf("access and permissions") !== -1 || n.indexOf("access") !== -1) { b.access.push(s); return; }
+      if (n.indexOf("c-level") !== -1 || (n.indexOf("management") !== -1 && n.indexOf("team") === -1)) { b.leadership.push(s); return; }
+      if (n.indexOf("inbet teams") !== -1 || n.indexOf("team") !== -1) { b.teams.push(s); return; }
+    });
+    return b;
+  }
+
+  /* ---- section builders ------------------------------------------------- */
+
+  function sectionHead(eyebrow, title, sub, dark) {
+    return '' +
+      '<div class="section__head reveal">' +
+      '<p class="eyebrow">' + esc(eyebrow) + '</p>' +
+      '<h2>' + esc(title) + '</h2>' +
+      (sub ? '<p>' + esc(sub) + '</p>' : '') +
+      '</div>';
+  }
+
+  function buildNav(model, b) {
+    var links = [];
+    if (b.teams.length) links.push(['#teams', 'Teams']);
+    if (b.leadership.length) links.push(['#leadership', 'Leadership']);
+    if (b.practices.length) links.push(['#practices', 'Best practices']);
+    if (b.access.length) links.push(['#access', 'Access']);
+    if (b.firststeps) links.push(['#firststeps', 'First steps']);
+
+    var linksHtml = links.map(function (l) {
+      return '<a href="' + l[0] + '">' + esc(l[1]) + '</a>';
+    }).join('');
+
+    var logo = model.logo
+      ? '<img src="' + attr(model.logo) + '" alt="Inbet">'
+      : '<strong style="color:#fff;font-family:var(--ff-display)">Inbet</strong>';
+
+    return el(
+      '<header class="nav" id="nav">' +
+        '<div class="wrap">' +
+          '<a class="nav__brand" href="#top">' + logo + '<span class="badge">Onboarding</span></a>' +
+          '<button class="nav__toggle" aria-label="Menu" aria-expanded="false">' +
+            '<span></span><span></span><span></span>' +
+          '</button>' +
+          '<nav class="nav__links">' + linksHtml + '</nav>' +
+          '<span class="sync"><span class="dot"></span>Synced from deck - ' + model.meta.slideCount + ' slides</span>' +
+        '</div>' +
+      '</header>'
+    );
+  }
+
+  function buildHero(model, b, brand) {
+    var title = (b.hero && b.hero.title) ? b.hero.title : "Welcome to";
+    var bg = model.hero
+      ? '<div class="hero__bg"><img src="' + attr(model.hero) + '" alt=""></div>'
+      : '<div class="hero__bg"></div>';
+    var logo = model.logo ? '<img class="hero__logo" src="' + attr(model.logo) + '" alt="Inbet">' : '';
+    var cta = '';
+    if (b.teams.length) cta += '<a class="btn btn--primary" href="#teams">Meet the teams</a>';
+    if (b.firststeps) cta += '<a class="btn btn--ghost" href="#firststeps">Your first steps</a>';
+
+    return el(
+      '<section class="hero" id="top">' +
+        bg +
+        '<div class="wrap hero__inner">' +
+          logo +
+          '<p class="eyebrow">New starter onboarding</p>' +
+          '<h1>' + esc(title) + ' <em>' + esc(brand) + '</em></h1>' +
+          '<p class="hero__sub">Everything you need to get started - who does what across the business, ' +
+          'how we work day to day, and the tools and links that set you up from day one.</p>' +
+          '<div class="hero__cta">' + cta + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildIntro(b) {
+    if (!b.intro || !b.intro.smartart[0]) return null;
+    var top = b.intro.smartart[0];
+    var cards = top.map(function (node) {
+      var parts = node.text.split(/\s+/);
+      var kind = parts.length > 1 ? parts[parts.length - 1] : "Channel";
+      var tags = (node.children || []).map(function (c) {
+        return '<span class="tag"><span class="chip"></span>' + esc(c.text) + '</span>';
+      }).join('');
+      return '' +
+        '<div class="intro-card reveal">' +
+          '<span class="kind">' + esc(kind) + '</span>' +
+          '<h3>' + esc(node.text) + '</h3>' +
+          '<div class="tags">' + tags + '</div>' +
+        '</div>';
+    }).join('');
+
+    return el(
+      '<section class="section section--alt" id="intro">' +
+        '<div class="wrap">' +
+          sectionHead('Introduction', b.intro.title || 'Introduction',
+            'How Inbet reaches its players - across the digital brands and the on-the-ground venues.') +
+          '<div class="intro-grid">' + cards + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildTeams(b) {
+    if (!b.teams.length) return null;
+
+    // chip-cloud glance from the team-wheel SmartArt (first team slide)
+    var glance = '';
+    for (var i = 0; i < b.teams.length; i++) {
+      var sa = b.teams[i].smartart[0];
+      if (sa && sa[0] && sa[0].children && sa[0].children.length) {
+        glance = sa[0].children.map(function (c) {
+          return '<span>' + esc(c.text) + '</span>';
+        }).join('');
+        break;
+      }
+    }
+    glance = glance ? '<div class="glance reveal">' + glance + '</div>' : '';
+
+    var cards = b.teams.map(function (s) {
+      var names = (s.boldRuns || []).map(tidyName).filter(Boolean);
+      var name = names.length ? names.join(' & ') : (s.title || 'Team');
+      var token = initials(names[0] || name);
+      var body = s.bodyText || '';
+      return '' +
+        '<article class="card reveal">' +
+          '<div class="card__top">' +
+            '<span class="chip card__token">' + esc(token) + '</span>' +
+            '<h3 class="card__name">' + esc(name) + '</h3>' +
+          '</div>' +
+          '<p class="card__body">' + esc(body) + '</p>' +
+        '</article>';
+    }).join('');
+
+    return el(
+      '<section class="section" id="teams">' +
+        '<div class="wrap">' +
+          sectionHead('Inbet Teams', 'The teams you will work with',
+            'Every team that keeps Inbet running, and what each one owns.') +
+          glance +
+          '<div class="cards">' + cards + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildLeadership(b) {
+    if (!b.leadership.length) return null;
+    var execs = b.leadership.map(function (s) {
+      var bolds = (s.boldRuns || []).map(tidyName).filter(Boolean);
+      var mono = bolds[0] || '';
+      var title = bolds[1] || '';
+      var roleMatch = title.match(/Chief\s+(.+?)\s+Officer/i);
+      var role = roleMatch ? roleMatch[1] : 'Leadership';
+      return '' +
+        '<article class="exec reveal">' +
+          '<span class="chip exec__mono">' + esc(mono) + '</span>' +
+          '<div class="exec__body-wrap">' +
+            '<p class="exec__role">' + esc(role) + '</p>' +
+            '<h3 class="exec__title">' + esc(title || mono) + '</h3>' +
+            '<p class="exec__body">' + esc(s.bodyText || '') + '</p>' +
+          '</div>' +
+        '</article>';
+    }).join('');
+
+    return el(
+      '<section class="section section--dark on-dark" id="leadership">' +
+        '<div class="wrap">' +
+          sectionHead('C-level management', 'Who leads Inbet',
+            'The executive team and the part of the business each one steers.', true) +
+          '<div class="execs">' + execs + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildPractices(b) {
+    if (!b.practices.length) return null;
+    var tools = b.practices.map(function (s) {
+      var sa = s.smartart[0];
+      if (!sa || !sa[0]) return '';
+      var top = sa[0];
+      var toolName = top.text.replace(/^best practices\s*[-:]\s*/i, '').trim() || top.text;
+      var chip = (toolName.replace(/[^A-Za-z]/g, '')[0] || '?').toUpperCase();
+
+      var shifts = (top.children || []).map(function (sh, idx) {
+        var ticks = (sh.children || []).map(function (t) {
+          return '<li>' + esc(t.text) + '</li>';
+        }).join('');
+        return '' +
+          '<div class="shift">' +
+            '<div class="shift__label">' +
+              '<span class="chip shift__num">' + (idx + 1) + '</span>' +
+              '<h4>' + esc(sh.text) + '</h4>' +
+            '</div>' +
+            '<ul class="ticks">' + ticks + '</ul>' +
+          '</div>';
+      }).join('');
+
+      return '' +
+        '<div class="tool reveal">' +
+          '<div class="tool__head"><span class="chip">' + esc(chip) + '</span><h3>' + esc(toolName) + '</h3></div>' +
+          '<div class="tool__body">' + shifts + '</div>' +
+        '</div>';
+    }).join('');
+
+    return el(
+      '<section class="section section--alt" id="practices">' +
+        '<div class="wrap">' +
+          sectionHead('Best Practices', 'How we work, shift by shift',
+            'Simple routines for Jira and email that keep everyone aligned through the day.') +
+          '<div class="tools">' + tools + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildAccess(b) {
+    if (!b.access.length) return null;
+
+    // collect every table across the access slides
+    var tables = [];
+    b.access.forEach(function (s) {
+      (s.tables || []).forEach(function (t) { if (t.rows && t.rows.length) tables.push(t); });
+    });
+
+    function rank(header) {
+      var h = (header || '').toLowerCase();
+      if (h.indexOf('account') !== -1) return 0;
+      if (h.indexOf('shared') !== -1) return 1;
+      if (h.indexOf('website') !== -1 || h.indexOf('web') !== -1) return 2;
+      return 3;
+    }
+    tables.sort(function (a, b2) {
+      return rank(a.rows[0][0] && a.rows[0][0].text) - rank(b2.rows[0][0] && b2.rows[0][0].text);
+    });
+
+    var hasLinks = tables.some(function (t) {
+      return t.rows.some(function (r) { return r.some(function (c) { return c.href; }); });
+    });
+
+    var panels = tables.map(function (t) {
+      var header = t.rows[0] || [];
+      var label = (header[0] && header[0].text) || 'Access';
+      var hint = (header[1] && header[1].text) || '';
+      var rows = t.rows.slice(1).map(function (r) {
+        var c0 = r[0] || { text: '' };
+        var c1 = r[1] || { text: '' };
+        var nameHtml;
+        if (c0.href) {
+          nameHtml = '<a class="row__name" href="' + attr(c0.href) + '" target="_blank" rel="noopener noreferrer">' +
+            esc(c0.text) + EXT_SVG + '</a>';
+        } else {
+          nameHtml = '<span class="row__name">' + esc(c0.text) + '</span>';
+        }
+        return '<div class="row">' + nameHtml +
+          (c1.text ? '<span class="row__use">' + esc(c1.text) + '</span>' : '') +
+          '</div>';
+      }).join('');
+      return '' +
+        '<div class="panel reveal">' +
+          '<h3><span class="chip"></span>' + esc(label) + '</h3>' +
+          (hint ? '<p class="panel__hint">' + esc(hint) + '</p>' : '') +
+          '<div class="rows">' + rows + '</div>' +
+        '</div>';
+    }).join('');
+
+    return el(
+      '<section class="section" id="access">' +
+        '<div class="wrap">' +
+          sectionHead('Access and permissions', 'Your accounts, tools and links',
+            'What you will be set up with, and the systems you will sign in to.' +
+            (hasLinks ? ' Links open in a new tab.' : '')) +
+          '<div class="access-grid">' + panels + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildFirstSteps(b) {
+    if (!b.firststeps) return null;
+    var s = b.firststeps;
+    var table = (s.tables || [])[0];
+    var lead = s.bodyText || '';
+    var stepsHtml = '';
+
+    if (table && table.rows.length) {
+      var rows = table.rows.slice(1); // drop header ("Link")
+      stepsHtml = rows.map(function (r, idx) {
+        var c0 = r[0] || { text: '' };
+        var c1 = r[1] || { text: '' };
+        var head;
+        if (c0.href) {
+          head = '<h4><a href="' + attr(c0.href) + '" target="_blank" rel="noopener noreferrer" ' +
+            'style="color:inherit;display:inline-flex;align-items:center;gap:7px">' +
+            esc(c0.text) + EXT_SVG + '</a></h4>';
+        } else {
+          head = '<h4>' + esc(c0.text) + '</h4>';
+        }
+        var staticCls = c0.href ? '' : ' is-static';
+        return '' +
+          '<div class="step reveal' + staticCls + '">' +
+            '<span class="chip step__num">' + (idx + 1) + '</span>' +
+            head +
+            (c1.text ? '<p>' + esc(c1.text) + '</p>' : '') +
+          '</div>';
+      }).join('');
+    }
+
+    return el(
+      '<section class="section section--alt" id="firststeps">' +
+        '<div class="wrap">' +
+          sectionHead('First steps', s.title || 'First steps in getting to know Inbet', lead) +
+          '<div class="steps">' + stepsHtml + '</div>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildClosing(model, b, brand) {
+    var title = (b.closing && b.closing.title) ? b.closing.title : 'Welcome to your new role';
+    var logo = model.logo ? '<img class="closing__logo" src="' + attr(model.logo) + '" alt="Inbet">' : '';
+    return el(
+      '<section class="closing" id="closing">' +
+        '<div class="closing__bg"></div>' +
+        '<div class="wrap closing__inner reveal">' +
+          logo +
+          '<h2>' + esc(title) + ' <span style="color:var(--yellow)">' + esc(brand) + '</span></h2>' +
+          '<a class="btn btn--primary" href="#top">Back to top</a>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function buildFooter(model) {
+    var logo = model.logo ? '<img src="' + attr(model.logo) + '" alt="Inbet">' : '<span>Inbet</span>';
+    return el(
+      '<footer class="foot">' +
+        '<div class="wrap">' +
+          '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">' + logo +
+            '<span>Internal onboarding to Inbet Online.</span></div>' +
+          '<span>Live-synced from <code>Welcome_Inbet_Online.pptx</code></span>' +
+        '</div>' +
+      '</footer>'
+    );
+  }
+
+  /* ---- behaviours ------------------------------------------------------- */
+
+  function wireNavToggle(nav) {
+    var toggle = $('.nav__toggle', nav);
+    if (!toggle) return;
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('.nav__links a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  function wireReveal() {
+    var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (i) { i.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (i) { io.observe(i); });
+  }
+
+  function wireScrollSpy(nav) {
+    var links = Array.prototype.slice.call(nav.querySelectorAll('.nav__links a'));
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var map = {};
+    links.forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      var sec = document.getElementById(id);
+      if (sec) map[id] = a;
+    });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (a) { a.classList.remove('is-active'); });
+          var a = map[e.target.id];
+          if (a) a.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    Object.keys(map).forEach(function (id) { spy.observe(document.getElementById(id)); });
+  }
+
+  /* ---- render ----------------------------------------------------------- */
+
+  function render(model) {
+    var b = bucket(model);
+    var brand = brandFrom(model, b.intro);
+    var root = document.getElementById('app');
+    root.innerHTML = '';
+
+    var nav = buildNav(model, b);
+    document.body.insertBefore(nav, root);
+
+    var frag = document.createDocumentFragment();
+    [
+      buildHero(model, b, brand),
+      buildIntro(b),
+      buildTeams(b),
+      buildLeadership(b),
+      buildPractices(b),
+      buildAccess(b),
+      buildFirstSteps(b),
+      buildClosing(model, b, brand),
+      buildFooter(model)
+    ].forEach(function (node) { if (node) frag.appendChild(node); });
+    root.appendChild(frag);
+
+    wireNavToggle(nav);
+    wireReveal();
+    wireScrollSpy(nav);
+    document.title = 'Inbet - New starter onboarding';
+  }
+
+  /* ---- states ----------------------------------------------------------- */
+
+  function showLoading() {
+    document.getElementById('app').innerHTML =
+      '<div class="state"><div class="state__inner">' +
+        '<div class="spinner"></div>' +
+        '<h2>Loading the welcome deck</h2>' +
+        '<p>Reading <code>Welcome_Inbet_Online.pptx</code> and building your onboarding page.</p>' +
+      '</div></div>';
+  }
+
+  function showError(deckUrl, err) {
+    var isLocal = location.protocol === 'file:';
+    var msg = isLocal
+      ? 'This page reads the PowerPoint file directly, which browsers block when you open the HTML straight from disk (the <code>file://</code> protocol). Serve the folder over http instead - see below - and it will load.'
+      : 'The deck could not be read. Make sure <code>Welcome_Inbet_Online.pptx</code> sits in the same folder as this page (or pass <code>?deck=</code> with its path).';
+    var how = isLocal
+      ? '<pre># From the project folder, pick one:\n\n' +
+        '# VS Code: install the "Live Server" extension,\n' +
+        '# then right-click index.html -> "Open with Live Server".\n\n' +
+        '# Or any static server, e.g.:\n' +
+        'python3 -m http.server 8080\n' +
+        '# then open http://localhost:8080/\n\n' +
+        '# Or publish the folder with GitHub Pages.</pre>'
+      : '<pre>' + esc(String(err && err.message ? err.message : err)) + '</pre>';
+
+    document.getElementById('app').innerHTML =
+      '<div class="state"><div class="state__inner">' +
+        '<div class="err-icon">!</div>' +
+        '<h2>Couldn\'t load the deck</h2>' +
+        '<p>' + msg + '</p>' +
+        how +
+      '</div></div>';
+  }
+
+  /* ---- boot ------------------------------------------------------------- */
+
+  function boot() {
+    showLoading();
+    var deckUrl = DECK_DEFAULT;
+    try {
+      var q = new URLSearchParams(location.search).get('deck');
+      if (q) deckUrl = q;
+    } catch (e) { /* ignore */ }
+
+    if (typeof JSZip === 'undefined') {
+      showError(deckUrl, new Error('JSZip failed to load from the CDN. Check your connection.'));
+      return;
+    }
+
+    fetch(deckUrl)
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' fetching ' + deckUrl);
+        return res.arrayBuffer();
+      })
+      .then(function (buf) { return JSZip.loadAsync(buf); })
+      .then(function (zip) { return window.InbetDeck.parseDeck(zip); })
+      .then(function (model) {
+        try { render(model); }
+        catch (e) { showError(deckUrl, e); throw e; }
+      })
+      .catch(function (err) {
+        showError(deckUrl, err);
+        if (window.console) console.error('[Inbet onboarding]', err);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+
+  </script>
+</body>
+</html>
